@@ -1,0 +1,91 @@
+<mat-form-field appearance="outline" [class]="class"
+    *ngIf="isValidation == true && isMultiRowMultiDatePicker == false && isSingleMultiDatePicker == false">
+    <mat-label>{{lable}}<span *ngIf="isRequired && lable != undefined && lable != null" class="required_symbol">*</span>
+    </mat-label>
+    <input [name]="name" (blur)="setDatepicker($event.target.value);(maximum ? ValidateMax(): ValidateMin())" [formControl]="formName" matInput>
+    <input name="{{name}}" (dateInput)="DateValueSet($event.value);(maximum ? ValidateMax(): ValidateMin())" [max]="maximum ? maximumValue : null"
+        [min]="minimum ? mininmumValue : null" [formControl]="formNameOne" matInput readonly class="d-none"
+        [matDatepicker]="picker">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    <span matSuffix *ngIf="formName.hasError('required') && formName.touched" matTooltip={{toolTips}}
+        [matTooltipDisabled]="!formName.invalid">
+        <mat-icon color="warn">info</mat-icon>
+    </span>
+    <span matSuffix *ngIf="formName.hasError('fromtoInvalid') && formName.touched" matTooltip={{toolTips4}}
+        [matTooltipDisabled]="!formName.invalid">
+        <mat-icon color="warn">info</mat-icon>
+    </span>
+    <span matSuffix *ngIf="formName.hasError('dateVaidator') && formName.touched" matTooltip={{toolTips1}}
+        [matTooltipDisabled]="!formName.invalid">
+        <mat-icon color="warn">info</mat-icon>
+    </span>
+    <span matSuffix *ngIf="formName.hasError('pattern') && formName.touched" matTooltip={{toolTips1}}
+        [matTooltipDisabled]="!formName.invalid">
+        <mat-icon color="warn">info</mat-icon>
+    </span>
+    <span matSuffix *ngIf="(formName.hasError('max') && formName.touched) ||  (formName.hasError('max') && formNameOne.touched)" matTooltip={{toolTips2}}
+        [matTooltipDisabled]="!formName.invalid">
+        <mat-icon color="warn">info</mat-icon>
+    </span>
+    <span matSuffix *ngIf="(formName.hasError('min') && formName.touched) || (formName.hasError('min') && formNameOne.touched)" matTooltip={{toolTips3}}
+        [matTooltipDisabled]="!formName.invalid">
+        <mat-icon color="warn">info</mat-icon>
+    </span>
+</mat-form-field>
+
+<mat-form-field appearance="outline" [class]="class" *ngIf="isValidation == false">
+    <mat-label>{{lable}}<span *ngIf="isRequired && lable != undefined && lable != null" class="required_symbol">*</span>
+    </mat-label>
+    <input name="{{name}}" [formControl]="newForm" matInput>
+    <input name="{{name}}" (dateInput)="DateValue($event.value)" [formControl]="newFormOne" matInput readonly
+        class="d-none" [matDatepicker]="picker4">
+    <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+    <mat-datepicker #picker4></mat-datepicker>
+</mat-form-field>
+
+
+<mat-form-field appearance="outline" [class]="class"
+    *ngIf="isValidation == true && (isMultiRowMultiDatePicker == true || isSingleMultiDatePicker == true)">
+    <mat-label>{{lable}}<span *ngIf="isRequired && lable != undefined && lable != null" class="required_symbol">*</span>
+    </mat-label>
+    <mat-chip-list #chipList>
+        <mat-chip *ngFor="let value of isMultiRowMultiDatePicker == true ? model[Index] : singleModel"
+            [selectable]="false" [removable]="true" (removed)="remove(value)">
+            {{ value}}
+            <mat-icon matChipRemove *ngIf="true">cancel</mat-icon>
+        </mat-chip>
+        <!-- <input [name]="name"  class="d-none"
+        [formControl]="formName" matInput> -->
+        <input matInput [matChipInputFor]="chipList" (blur)="setDatepicker($event.target.value);"
+            (matChipInputTokenEnd)="setDatepicker($event.value)" [formControl]="newMutiltiPicker"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes" />
+        <input name="{{name}}" (click)="picker1.open()" (dateInput)="DateValueSet($event.value)"
+            [max]="maximum ? maximumValue : null" [min]="minimum ? mininmumValue : null" [formControl]="formNameTwo"
+            matInput readonly class="d-none" [matDatepicker]="picker1" [dateClass]="dateClass">
+    </mat-chip-list>
+
+    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+    <mat-datepicker #picker1></mat-datepicker>
+    <span matSuffix
+        *ngIf="((newMutiltiPicker.hasError('required') || formName.hasError('required')) && newMutiltiPicker.touched) && !newMutiltiPicker.hasError('dateVaidator') && !newMutiltiPicker.hasError('pattern') && !newMutiltiPicker.hasError('max') && !newMutiltiPicker.hasError('min')"
+        matTooltip={{toolTips}} [matTooltipDisabled]="!newMutiltiPicker.invalid || !formName.invalid">
+        <mat-icon color="warn">info</mat-icon>
+    </span>
+    <span matSuffix *ngIf="newMutiltiPicker.hasError('dateVaidator') && newMutiltiPicker.touched"
+        matTooltip={{toolTips1}} [matTooltipDisabled]="!newMutiltiPicker.invalid">
+        <mat-icon color="warn">info</mat-icon>
+    </span>
+    <span matSuffix *ngIf="newMutiltiPicker.hasError('pattern') && newMutiltiPicker.touched" matTooltip={{toolTips1}}
+        [matTooltipDisabled]="!newMutiltiPicker.invalid">
+        <mat-icon color="warn">info</mat-icon>
+    </span>
+    <span matSuffix *ngIf="newMutiltiPicker.hasError('max') && newMutiltiPicker.touched" matTooltip={{toolTips2}}
+        [matTooltipDisabled]="!newMutiltiPicker.invalid">
+        <mat-icon color="warn">info</mat-icon>
+    </span>
+    <span matSuffix *ngIf="newMutiltiPicker.hasError('min') && newMutiltiPicker.touched" matTooltip={{toolTips3}}
+        [matTooltipDisabled]="!newMutiltiPicker.invalid">
+        <mat-icon color="warn">info</mat-icon>
+    </span>
+</mat-form-field>

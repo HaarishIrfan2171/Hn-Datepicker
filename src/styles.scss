@@ -1,0 +1,54 @@
+
+mat-form-field.date-field,mat-form-field.input-field{
+    position: relative;
+    top: 0px;
+}
+ mat-form-field.mat-form-field-appearance-outline.input-field .mat-form-field-infix {
+    padding: 0.6em 0 0.8em 0;
+}
+ mat-form-field.mat-form-field-appearance-outline.date-field .mat-form-field-infix {
+    padding: 0.6em 0 0.8em 0;
+}
+
+
+mat-form-field input {
+    font-size: 14px;
+    color: blue !important;
+    font-weight: 500;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.mat-form-field-suffix{
+    display: flex;
+    align-items: center;
+    mat-icon{
+        cursor: pointer;
+    }
+ }
+ .error-icon{
+     cursor: pointer;
+ }
+ .mat-form-field-label{
+    height: 18px;  
+}
+
+.d-none{
+    display: none;
+}
+
+.d-flex{
+    display: flex;
+}
+
+.container{
+    height: 100%;
+    padding: 30px;
+}
+
+.ml-10{
+    margin-left: 10px;
+}
+
+.required_symbol {
+    color: red;
+}

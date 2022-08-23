@@ -1,0 +1,59 @@
+<div class="container">
+  <mat-card>
+    <mat-card-title>HN Datepickwer</mat-card-title>
+    <mat-card-subtitle>Single Form Datepicker</mat-card-subtitle>
+    <form [formGroup]="MydateForm">
+      <app-hn-datepicker lable="Single Datepicker" name="Date" [maximum]=false [minimum]=false [ifMultiRow]=false
+        [ifSingle]=true [isValidation]=true [isRequired]=true [formName]=MydateForm.controls.singledate
+        [formNameOne]=MydateForm.controls.singledateone toolTips="Please choose the date"
+        toolTips1="please choose the valid date" class="date-field w200">
+      </app-hn-datepicker>
+
+      <app-hn-datepicker lable="Multiple Datepicker" name="Date" [maximum]=false [minimum]=false [ifMultiRow]=false
+        [isSingleMultiDatePicker]=true [ifSingle]=true [isValidation]=true [isRequired]=true
+        [formName]=MydateForm.controls.multidate [formNameOne]=MydateForm.controls.multidateone
+        [formNameTwo]=MydateForm.controls.multidatetwo toolTips="Please choose the date"
+        toolTips1="please choose the valid date" class="date-field w200 ml-10">
+      </app-hn-datepicker>
+
+      <div>
+        <h2><b>From date To date Validation</b></h2>
+        <h4>Min Date Validation</h4>
+        <app-hn-datepicker lable="From Date" name="Date" [maximum]=false [minimum]=true [formgroup]=MydateForm
+          formCtrName="singleTodate" [isfrom]=true formCtrNameOne="singleTodateone" [mininmumValue]=todate
+          [ifMultiRow]=false [ifSingle]=true [isValidation]=true [isRequired]=true
+          [formName]=MydateForm.controls.singleFromdate [formNameOne]=MydateForm.controls.singleFromdateone
+          toolTips="Please choose the from date" toolTips1="please choose the valid form date"
+          toolTips3="To date Should be grater than from date" class="date-field w200">
+        </app-hn-datepicker>
+
+        <app-hn-datepicker lable="To Date" name="Date" [maximum]=false [minimum]=true [formgroup]=MydateForm
+          formCtrName="singleFromdate" formCtrNameOne="singleFromdateone" [isto]=true
+          [mininmumValue]=MydateForm.controls.singleFromdateone.value [ifMultiRow]=false
+          toolTips3="To date Should be grater than from date" [ifSingle]=true [isValidation]=true [isRequired]=true
+          [formName]=MydateForm.controls.singleTodate [formNameOne]=MydateForm.controls.singleTodateone
+          toolTips="Please choose the to date" toolTips1="please choose the valid to date"
+          class="date-field w200  ml-10">
+        </app-hn-datepicker>
+
+        <h4>Max Date Validation</h4>
+        <app-hn-datepicker lable="From Date" name="Date" [maximum]=true [maximumValue]=null [minimum]=true [formgroup]=MydateForm
+        formCtrName="maxsingleTodate" [isfrom]=true formCtrNameOne="maxsingleTodateone" [mininmumValue]=todate
+        [ifMultiRow]=false [ifSingle]=true [isValidation]=true [isRequired]=true
+        [formName]=MydateForm.controls.maxsingleFromdate [formNameOne]=MydateForm.controls.maxsingleFromdateone
+        toolTips="Please choose the from date" toolTips2="please choose the valid form date"
+        toolTips3="To date Should be grater than from date" class="date-field w200">
+      </app-hn-datepicker>
+
+      <app-hn-datepicker lable="To Date" name="Date" [maximum]=true [minimum]=true [formgroup]=MydateForm
+        formCtrName="maxsingleFromdate" formCtrNameOne="maxsingleFromdateone" [isto]=true
+        [mininmumValue]=todate [maximumValue]=MydateForm.controls.maxsingleFromdateone.value [ifMultiRow]=false
+        toolTips3="To date Should be grater than from date" [ifSingle]=true [isValidation]=true [isRequired]=true
+        [formName]=MydateForm.controls.maxsingleTodate [formNameOne]=MydateForm.controls.maxsingleTodateone
+        toolTips="Please choose the to date" toolTips2="please choose the valid to date"
+        class="date-field w200  ml-10">
+      </app-hn-datepicker>
+      </div>
+    </form>
+  </mat-card>
+</div>
