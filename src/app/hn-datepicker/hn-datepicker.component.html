@@ -2,8 +2,8 @@
     *ngIf="isValidation == true && isMultiRowMultiDatePicker == false && isSingleMultiDatePicker == false">
     <mat-label>{{lable}}<span *ngIf="isRequired && lable != undefined && lable != null" class="required_symbol">*</span>
     </mat-label>
-    <input [name]="name" (blur)="setDatepicker($event.target.value);(maximum ? ValidateMax(): ValidateMin())" [formControl]="formName" matInput>
-    <input name="{{name}}" (dateInput)="DateValueSet($event.value);(maximum ? ValidateMax(): ValidateMin())" [max]="maximum ? maximumValue : null"
+    <input [name]="name" (blur)="setDatepicker($event.target.value);(maximum ? ValidateMax(): minimum ? ValidateMin() : '')" [formControl]="formName" matInput>
+    <input name="{{name}}" (dateInput)="DateValueSet($event.value);(maximum ? ValidateMax(): minimum ? ValidateMin() : '')" [max]="maximum ? maximumValue : null"
         [min]="minimum ? mininmumValue : null" [formControl]="formNameOne" matInput readonly class="d-none"
         [matDatepicker]="picker">
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -51,16 +51,14 @@
     </mat-label>
     <mat-chip-list #chipList>
         <mat-chip *ngFor="let value of isMultiRowMultiDatePicker == true ? model[Index] : singleModel"
-            [selectable]="false" [removable]="true" (removed)="remove(value)">
+            [selectable]="false" [removable]="true" (removed)="remove(value);(maximum ? ValidateMultiMax(): minimum ? ValidateMultiMin() : '')">
             {{ value}}
             <mat-icon matChipRemove *ngIf="true">cancel</mat-icon>
         </mat-chip>
-        <!-- <input [name]="name"  class="d-none"
-        [formControl]="formName" matInput> -->
-        <input matInput [matChipInputFor]="chipList" (blur)="setDatepicker($event.target.value);"
-            (matChipInputTokenEnd)="setDatepicker($event.value)" [formControl]="newMutiltiPicker"
+        <input matInput [matChipInputFor]="chipList" (blur)="setDatepicker($event.target.value);(maximum ? ValidateMultiMax(): minimum ? ValidateMultiMin() : '')"
+            (matChipInputTokenEnd)="setDatepicker($event.value);(maximum ? ValidateMultiMax(): minimum ? ValidateMultiMin() : '')" [formControl]="newMutiltiPicker"
             [matChipInputSeparatorKeyCodes]="separatorKeysCodes" />
-        <input name="{{name}}" (click)="picker1.open()" (dateInput)="DateValueSet($event.value)"
+        <input name="{{name}}" (click)="picker1.open()" (dateInput)="DateValueSet($event.value);(maximum ? ValidateMultiMax(): minimum ? ValidateMultiMin() : '')"
             [max]="maximum ? maximumValue : null" [min]="minimum ? mininmumValue : null" [formControl]="formNameTwo"
             matInput readonly class="d-none" [matDatepicker]="picker1" [dateClass]="dateClass">
     </mat-chip-list>
@@ -68,8 +66,8 @@
     <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
     <mat-datepicker #picker1></mat-datepicker>
     <span matSuffix
-        *ngIf="((newMutiltiPicker.hasError('required') || formName.hasError('required')) && newMutiltiPicker.touched) && !newMutiltiPicker.hasError('dateVaidator') && !newMutiltiPicker.hasError('pattern') && !newMutiltiPicker.hasError('max') && !newMutiltiPicker.hasError('min')"
-        matTooltip={{toolTips}} [matTooltipDisabled]="!newMutiltiPicker.invalid || !formName.invalid">
+        *ngIf="(newMutiltiPicker.hasError('required') && newMutiltiPicker.touched || formName.hasError('required') && newMutiltiPicker.touched || formName.hasError('required') && formName.touched) && !newMutiltiPicker.hasError('dateVaidator') && !newMutiltiPicker.hasError('pattern') && !newMutiltiPicker.hasError('max') && !newMutiltiPicker.hasError('min')"
+        matTooltip={{toolTips}} [matTooltipDisabled]="!newMutiltiPicker.invalid && !formName.invalid">
         <mat-icon color="warn">info</mat-icon>
     </span>
     <span matSuffix *ngIf="newMutiltiPicker.hasError('dateVaidator') && newMutiltiPicker.touched"

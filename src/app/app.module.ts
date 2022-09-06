@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TgssDatepickerModule } from './hn-datepicker/hn-datepicker.module';
+import {MatButtonModule} from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { TgssDatepickerModule } from './hn-datepicker/hn-datepicker.module';
     ReactiveFormsModule,
     TgssDatepickerModule,
     MatCardModule,
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]

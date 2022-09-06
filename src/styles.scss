@@ -1,4 +1,4 @@
-
+@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
 mat-form-field.date-field,mat-form-field.input-field{
     position: relative;
     top: 0px;
@@ -52,3 +52,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .required_symbol {
     color: red;
 }
+
+table {
+    width: 100%;
+}
+
+.mt-10{
+    margin-top: 10px!important;
+}
+

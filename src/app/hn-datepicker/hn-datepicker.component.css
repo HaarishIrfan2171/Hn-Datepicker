@@ -6,6 +6,10 @@
     width: 200px;
 }
 
+.w150{
+  width: 150px;
+}
+
 ::ng-deep .mat-calendar-body-cell.selected > .mat-calendar-body-cell-content,
 ::ng-deep .mat-calendar-body-cell.selected:hover > .mat-calendar-body-cell-content,
 ::ng-deep .mat-calendar-body-cell.selected > .mat-calendar-body-cell-content:hover {

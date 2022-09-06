@@ -1,0 +1,18 @@
+.table{
+    border-spacing: 0px;
+}
+.table td, .table th{
+    border-bottom: 1px solid #80808042;
+}
+.table th{
+    background: #673ab7;
+    padding: 12px;
+    text-align: left;
+    color: #fff;
+}
+.table td{
+    padding: 6px 12px 4px;
+}
+.table th{
+    white-space: nowrap;
+}
