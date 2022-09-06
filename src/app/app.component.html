@@ -37,23 +37,187 @@
         </app-hn-datepicker>
 
         <h4>Max Date Validation</h4>
-        <app-hn-datepicker lable="From Date" name="Date" [maximum]=true [maximumValue]=null [minimum]=true [formgroup]=MydateForm
-        formCtrName="maxsingleTodate" [isfrom]=true formCtrNameOne="maxsingleTodateone" [mininmumValue]=todate
-        [ifMultiRow]=false [ifSingle]=true [isValidation]=true [isRequired]=true
-        [formName]=MydateForm.controls.maxsingleFromdate [formNameOne]=MydateForm.controls.maxsingleFromdateone
-        toolTips="Please choose the from date" toolTips2="please choose the valid form date"
-        toolTips3="To date Should be grater than from date" class="date-field w200">
-      </app-hn-datepicker>
+        <app-hn-datepicker lable="From Date" name="Date" [maximum]=true [maximumValue]=null [minimum]=true
+          [formgroup]=MydateForm formCtrName="maxsingleTodate" [isfrom]=true formCtrNameOne="maxsingleTodateone"
+          [mininmumValue]=todate [ifMultiRow]=false [ifSingle]=true [isValidation]=true [isRequired]=true
+          [formName]=MydateForm.controls.maxsingleFromdate [formNameOne]=MydateForm.controls.maxsingleFromdateone
+          toolTips="Please choose the from date" toolTips2="please choose the valid form date"
+          toolTips3="To date Should be grater than from date" class="date-field w200">
+        </app-hn-datepicker>
 
-      <app-hn-datepicker lable="To Date" name="Date" [maximum]=true [minimum]=true [formgroup]=MydateForm
-        formCtrName="maxsingleFromdate" formCtrNameOne="maxsingleFromdateone" [isto]=true
-        [mininmumValue]=todate [maximumValue]=MydateForm.controls.maxsingleFromdateone.value [ifMultiRow]=false
-        toolTips3="To date Should be grater than from date" [ifSingle]=true [isValidation]=true [isRequired]=true
-        [formName]=MydateForm.controls.maxsingleTodate [formNameOne]=MydateForm.controls.maxsingleTodateone
-        toolTips="Please choose the to date" toolTips2="please choose the valid to date"
-        class="date-field w200  ml-10">
-      </app-hn-datepicker>
+        <app-hn-datepicker lable="To Date" name="Date" [maximum]=true [minimum]=true [formgroup]=MydateForm
+          formCtrName="maxsingleFromdate" formCtrNameOne="maxsingleFromdateone" [isto]=true [mininmumValue]=todate
+          [maximumValue]=MydateForm.controls.maxsingleFromdateone.value [ifMultiRow]=false
+          toolTips3="To date Should be grater than from date" [ifSingle]=true [isValidation]=true [isRequired]=true
+          [formName]=MydateForm.controls.maxsingleTodate [formNameOne]=MydateForm.controls.maxsingleTodateone
+          toolTips="Please choose the to date" toolTips2="please choose the valid to date"
+          class="date-field w200  ml-10">
+        </app-hn-datepicker>
       </div>
+
+      <div>
+        <h2><b>Multi Row Datepicker </b></h2>
+        <div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="width: 15%;">Single Datepicker </th>
+                <th style="width: 15%;">Multiple Datepicker </th>
+                <th style="width: 15%;">Minimum From Datepicker </th>
+                <th style="width: 15%;">Minimum To Datepicker </th>
+                <th style="width: 15%;">Max From Datepicker </th>
+                <th style="width: 15%;">Max To Datepicker </th>
+              </tr>
+            </thead>
+            <tbody formArrayName="dateFormArray">
+              <tr *ngFor="let datepicker of MydateForm.get('dateFormArray')['controls']; let i = index"
+                [formGroupName]="i">
+                <td style="width: 15%;">
+                  <app-hn-datepicker lable="Single Datepicker" name="Date" [maximum]=false [minimum]=false
+                    [ifMultiRow]=true [ifSingle]=false [isValidation]=true [isRequired]=true [Index]=i
+                    [formName]=datepicker.controls.singledate [formNameOne]=datepicker.controls.singledateone
+                    [formArray]=MydateForm.controls.dateFormArray multiformCtrName=singledate multiformCtrNameOne=singledateone
+                    toolTips="Please choose the date" toolTips1="please choose the valid date" class="date-field w150">
+                  </app-hn-datepicker>
+                </td>
+
+                <td style="width: 15%;">
+                  <app-hn-datepicker lable="Multiple Datepicker" name="Date" [maximum]=false [minimum]=false
+                    [ifMultiRow]=true [isSingleMultiDatePicker]=false [isMultiRowMultiDatePicker]=true [ifSingle]=false [isValidation]=true
+                    [isRequired]=true [formName]=datepicker.controls.multidate  [Index]=i [istouched]=datepicker.controls.multidate.touched
+                    [formNameOne]=datepicker.controls.multidateone [formNameTwo]=datepicker.controls.multidatetwo
+                    [formArray]=MydateForm.controls.dateFormArray multiformCtrName=multidate multiformCtrNameOne=multidateone multiformCtrNameTwo=multidatetwo
+                    toolTips="Please choose the date" toolTips1="please choose the valid date"
+                    class="date-field w200 ml-10">
+                  </app-hn-datepicker>
+                </td>
+
+                <td style="width: 15%;">
+                  <app-hn-datepicker lable="From Date" name="Date" [maximum]=false [minimum]=true [formgroup]=MydateForm
+                  formCtrName="singleTodate" formCtrNameOne="singleTodateone" [isfrom]=true  [Index]=i
+                  [mininmumValue]=todate [ifMultiRow]=true
+                  toolTips3="To date Should be grater than from date" [ifSingle]=false [isValidation]=true
+                  [isRequired]=true [formName]=datepicker.controls.singleFromdate
+                  [formNameOne]=datepicker.controls.singleFromdateone toolTips="Please choose the from date"
+                  [formArray]=MydateForm.controls.dateFormArray multiformCtrName=singleFromdate multiformCtrNameOne=singleFromdateone
+                  toolTips1="please choose the valid from date" class="date-field w150  ml-10">
+                </app-hn-datepicker>
+                </td>
+
+                <td style="width: 15%;">
+                  <app-hn-datepicker lable="To Date" name="Date" [maximum]=false [minimum]=true [formgroup]=MydateForm
+                    formCtrName="singleFromdate" formCtrNameOne="singleFromdateone" [isto]=true  [Index]=i
+                    [mininmumValue]=datepicker.controls.singleFromdateone.value [ifMultiRow]=true
+                    toolTips3="To date Should be grater than from date" [ifSingle]=false [isValidation]=true
+                    [isRequired]=true [formName]=datepicker.controls.singleTodate
+                    [formNameOne]=datepicker.controls.singleTodateone toolTips="Please choose the to date"
+                    [formArray]=MydateForm.controls.dateFormArray multiformCtrName=singleTodate multiformCtrNameOne=singleTodateone
+                    toolTips1="please choose the valid to date" class="date-field w150  ml-10">
+                  </app-hn-datepicker>
+                </td>
+
+                <td style="width: 15%;">
+                  <app-hn-datepicker lable="From Date" name="Date" [maximum]=true [maximumValue]=null [minimum]=true
+                  [formgroup]=MydateForm formCtrName="maxsingleTodate" [isfrom]=true formCtrNameOne="maxsingleTodateone"
+                  [mininmumValue]=todate [ifMultiRow]=true [ifSingle]=false [isValidation]=true [isRequired]=true
+                  [formName]=datepicker.controls.maxsingleFromdate [formNameOne]=datepicker.controls.maxsingleFromdateone
+                  [formArray]= MydateForm.controls.dateFormArray multiformCtrName=maxsingleFromdate multiformCtrNameOne=maxsingleFromdateone
+                  toolTips="Please choose the from date" toolTips2="please choose the valid form date"  [Index]=i
+                  toolTips3="To date Should be grater than from date" class="date-field w150">
+                </app-hn-datepicker>
+                </td>
+
+                <td style="width: 15%;">
+                  <app-hn-datepicker lable="To Date" name="Date" [maximum]=true [minimum]=true [formgroup]=MydateForm
+                  formCtrName="maxsingleFromdate" formCtrNameOne="maxsingleFromdateone" [isto]=true [mininmumValue]=todate
+                  [maximumValue]=datepicker.controls.maxsingleFromdateone.value [ifMultiRow]=true  [Index]=i
+                  toolTips3="To date Should be grater than from date" [ifSingle]=false [isValidation]=true [isRequired]=true
+                  [formArray]= MydateForm.controls.dateFormArray multiformCtrName=maxsingleTodate multiformCtrNameOne=maxsingleTodateone
+                  [formName]=datepicker.controls.maxsingleTodate [formNameOne]=datepicker.controls.maxsingleTodateone
+                  toolTips="Please choose the to date" toolTips2="please choose the valid to date"
+                  class="date-field w150  ml-10">
+                </app-hn-datepicker>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button class="mt-10" type="button" (click)="addMore()" mat-raised-button color="primary">+ Add</button>
+      </div>
+
+      <div>
+        <h2><b>Multi Row Minimum Maximum Datepicker </b></h2>
+        <div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="width: 15%;">Multi Minimum From Datepicker </th>
+                <th style="width: 15%;">Multi Minimum To Datepicker </th>
+                <th style="width: 15%;">Multi Max From Datepicker </th>
+                <th style="width: 15%;">Multi Max To Datepicker </th>
+              </tr>
+            </thead>
+            <tbody formArrayName="multiDatepickerArray">
+              <tr *ngFor="let datepicker of MydateForm.get('multiDatepickerArray')['controls']; let i = index"
+                [formGroupName]="i">
+
+                <td style="width: 15%;">
+                  <app-hn-datepicker lable="From Date" name="Date" [maximum]=false [minimum]=true [formgroup]=MydateForm
+                  formCtrName="multiTodate" formCtrNameOne="multiTodateone" formCtrNameTwo="multiTodatetwo" [isfrom]=true  [Index]=i
+                  [mininmumValue]=todate [ifMultiRow]=true [isMultiRowMultiDatePicker]=true
+                  toolTips3="To date Should be grater than from date" [ifSingle]=false [isValidation]=true
+                  [isRequired]=true [formName]=datepicker.controls.multiFromdate
+                  [formNameOne]=datepicker.controls.multiFromdateone formNameTwo=datepicker.controls.multiFromdatetwo toolTips="Please choose the from date"
+                  [formArray]=MydateForm.controls.multiDatepickerArray multiformCtrName=multiFromdate multiformCtrNameOne=multiFromdateone 
+                  multiformCtrNameTwo=multiFromdatetwo
+                  toolTips1="please choose the valid from date" class="date-field w200  ml-10">
+                </app-hn-datepicker>
+                </td>
+
+                <td style="width: 15%;">
+                  <app-hn-datepicker lable="To Date" name="Date" [maximum]=false [minimum]=true [formgroup]=MydateForm
+                    formCtrName="multiFromdate" formCtrNameOne="multiFromdateone" formCtrNameTwo="multiFromdatetwo" [isto]=true  [Index]=i
+                    [mininmumValue]=datepicker.controls.multiFromdate.value[0] [ifMultiRow]=true [isMultiRowMultiDatePicker]=true
+                    toolTips3="To date Should be grater than from date" [ifSingle]=false [isValidation]=true
+                    [isRequired]=true [formName]=datepicker.controls.multiTodate
+                    [formNameOne]=datepicker.controls.multiTodateone formNameTwo=datepicker.controls.multiTodatetwo toolTips="Please choose the to date"
+                    [formArray]=MydateForm.controls.multiDatepickerArray multiformCtrName=multiTodate multiformCtrNameOne=multiTodateone
+                    multiformCtrNameTwo=multiTodatetwo
+                    toolTips1="please choose the valid to date" class="date-field w200  ml-10">
+                  </app-hn-datepicker>
+                </td>
+
+                <td style="width: 15%;">
+                  <app-hn-datepicker lable="From Date" name="Date" [maximum]=true [maximumValue]=null [minimum]=true
+                  [formgroup]=MydateForm formCtrName="maxmultiTodate" [isfrom]=true formCtrNameOne="maxmultiTodateone"  formCtrNameTwo="maxmultiTodatetwo"
+                  [mininmumValue]=todate [ifMultiRow]=true [ifSingle]=false [isValidation]=true [isRequired]=true [isMultiRowMultiDatePicker]=true
+                  [formName]=datepicker.controls.maxmultiFromdate [formNameOne]=datepicker.controls.maxmultiFromdateone formNameTwo=datepicker.controls.maxmultiFromdatetwo 
+                  [formArray]= MydateForm.controls.multiDatepickerArray multiformCtrName=maxmultiFromdate multiformCtrNameOne=maxmultiFromdateone
+                  multiformCtrNameTwo=maxmultiFromdatetwo
+                  toolTips="Please choose the from date" toolTips2="please choose the valid form date"  [Index]=i
+                  toolTips3="To date Should be grater than from date" class="date-field w200">
+                </app-hn-datepicker>
+                </td>
+
+                <td style="width: 15%;">
+                  <app-hn-datepicker lable="To Date" name="Date" [maximum]=true [minimum]=true [formgroup]=MydateForm
+                  formCtrName="maxmultiFromdate" formCtrNameOne="maxmultiFromdateone"  formCtrNameTwo="maxmultiFromdatetwo" 
+                  [isto]=true [mininmumValue]=todate
+                  [maximumValue]=maxdate [ifMultiRow]=true  [Index]=i [isMultiRowMultiDatePicker]=true
+                  toolTips3="To date Should be grater than from date" [ifSingle]=false [isValidation]=true [isRequired]=true
+                  [formArray]= MydateForm.controls.multiDatepickerArray multiformCtrName=maxmultiTodate multiformCtrNameOne=maxmultiTodateone
+                  [formName]=datepicker.controls.maxmultiTodate [formNameOne]=datepicker.controls.maxmultiTodateone formNameTwo=datepicker.controls.maxmultiTodatetwo 
+                  toolTips="Please choose the to date" multiformCtrNameTwo=maxmultiTodatetwo toolTips2="please choose the valid to date"
+                  class="date-field w200  ml-10">
+                </app-hn-datepicker>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button class="mt-10" type="button" (click)="addMore()" mat-raised-button color="primary">+ Add</button>
+      </div>
+
     </form>
   </mat-card>
 </div>

@@ -1,5 +1,5 @@
 import { COMMA, ENTER, I } from '@angular/cdk/keycodes';
-import { Component, Input, OnInit, Output, EventEmitter, forwardRef, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, forwardRef, ViewChild, SimpleChanges } from '@angular/core';
 import { FormArray, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validators } from '@angular/forms';
 import { MatDatepicker, MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { format } from 'date-fns';
@@ -37,8 +37,9 @@ export class HNDatepickerComponent implements OnInit {
   @Input() public isValidation: boolean = false;
   @Input() public isfrom: boolean = false;
   @Input() public isto: boolean = false;
-  @Input() public maximumValue: any[];
-  @Input() public mininmumValue: any[];
+  @Input() public istouched: boolean = false;
+  @Input() public maximumValue: any;
+  @Input() public mininmumValue: any;
   @Input() public formName: FormControl;
   @Input() public formNameOne: FormControl;
   @Input() public formNameTwo: FormControl;
@@ -129,15 +130,15 @@ export class HNDatepickerComponent implements OnInit {
     else if (this.ifMultiRow == true) {
       if (this.isRequired == true) {
         if (this.isSingleMultiDatePicker == true || this.isMultiRowMultiDatePicker == true) {
-          this.formArray.controls[this.Index].get(`${this.formCtrName}`).setValidators([Validators.required]);
+          this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).setValidators([Validators.required]);
           this.newMutiltiPicker.setValidators([Validators.required, DateValidator.dateVaidator]);
         }
         else if (this.ifMultiRow == true) {
-          this.formArray.controls[this.Index].get(`${this.formCtrName}`).setValidators([Validators.required, DateValidator.dateVaidator]);
-          this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).setValidators(Validators.required);
+          this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).setValidators([Validators.required, DateValidator.dateVaidator]);
+          this.formArray.controls[this.Index].get(`${this.multiformCtrNameOne}`).setValidators(Validators.required);
         }
         else{
-          this.formArray.controls[this.Index].get(`${this.formCtrName}`).setValidators(DateValidator.dateVaidator);
+          this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).setValidators(DateValidator.dateVaidator);
           this.newMutiltiPicker.setValidators(DateValidator.dateVaidator);
         }
       }
@@ -148,7 +149,7 @@ export class HNDatepickerComponent implements OnInit {
           this.newMutiltiPicker.setValidators([DateValidator.dateMinVaidator, DateValidator.dateVaidator]);
         }
         else {
-          this.formArray.controls[this.Index].get(`${this.formCtrName}`).setValidators(DateValidator.dateMinVaidator);
+          // this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).setValidators(DateValidator.dateMinVaidator);
         }
       }
 
@@ -158,36 +159,24 @@ export class HNDatepickerComponent implements OnInit {
           this.newMutiltiPicker.setValidators([DateValidator.dateMaxVaidator, DateValidator.dateVaidator]);
         }
         else{
-          this.formArray.controls[this.Index].get(`${this.formCtrName}`).setValidators(DateValidator.dateMaxVaidator);
+          // this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).setValidators(DateValidator.dateMaxVaidator);
         }
       }
-      // this.formArray.controls[this.Index].get(`${this.formCtrName}`).setValidators([this.isRequired == true ? Validators.required : Validators.nullValidator, DateValidator.dateVaidator, this.minimum == true ? DateValidator.dateMinVaidator : Validators.nullValidator, this.maximum == true ? DateValidator.dateMaxVaidator : Validators.nullValidator]);
-      // this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).setValidators([this.isRequired == true ? Validators.required : Validators.nullValidator,]);
-      // this.formArray.controls[this.Index][`${this.formNameOne}`].valueChanges.pipe(distinctUntilChanged()).subscribe((value)=> {
-      //   // if (String(typeof (value)) != 'object') {
-      //   //   date = value.split('-');
-      //   //   this.setDateValueMultiRow(value, date);
-      //   // }
-      //   // else {
-      //   //   date = format(value, "DD-MM-YYYY").split('-');
-      //   //   this.setDateValueMultiRow(value, date);
-      //   // }
-      // })
     }
 
     if (this.isMultiRowMultiDatePicker == true) {
       let selectedDate: any = [];
       let selecteddates: any = [];
       /****** Set value To Form Name One *************/
-      selectedDate = this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).value ? this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).value : [];
-      this.formArray.controls[Number(this.Index)].get(`${this.formCtrNameOne}`).setValue(selectedDate);
-      this.formArray.controls[Number(this.Index)].get(`${this.formCtrNameOne}`).updateValueAndValidity({ emitEvent: false });
+      selectedDate = this.formArray.controls[this.Index].get(`${this.multiformCtrNameOne}`).value ? this.formArray.controls[this.Index].get(`${this.multiformCtrNameOne}`).value : [];
+      this.formArray.controls[Number(this.Index)].get(`${this.multiformCtrNameOne}`).setValue(selectedDate);
+      this.formArray.controls[Number(this.Index)].get(`${this.multiformCtrNameOne}`).updateValueAndValidity({ emitEvent: false });
       this.model[Number(this.Index)] = selectedDate;
       /****** Set value To Form Name *************/
-      selecteddates = this.formArray.controls[this.Index].get(`${this.formCtrName}`).value ? this.formArray.controls[this.Index].get(`${this.formCtrName}`).value : [];
+      selecteddates = this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).value ? this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).value : [];
       
-      this.formArray.controls[Number(this.Index)].get(`${this.formCtrName}`).setValue(selecteddates);
-      this.formArray.controls[Number(this.Index)].get(`${this.formCtrName}`).updateValueAndValidity({ emitEvent: false });
+      this.formArray.controls[Number(this.Index)].get(`${this.multiformCtrName}`).setValue(selecteddates);
+      this.formArray.controls[Number(this.Index)].get(`${this.multiformCtrName}`).updateValueAndValidity({ emitEvent: false });
       this.models[Number(this.Index)] = selecteddates;
     }
     else if (this.isSingleMultiDatePicker == true) {
@@ -204,6 +193,7 @@ export class HNDatepickerComponent implements OnInit {
       this.formName.setValue(this.singleModels);
       this.formName.updateValueAndValidity({ emitEvent: false });
     }
+
   }
 
   setDateValue(value, date) {
@@ -289,10 +279,10 @@ export class HNDatepickerComponent implements OnInit {
             this.newMutiltiPicker.setValue('');
           }
           else {
-            this.formArray.controls[this.Index].get(`${this.formCtrName}`).setValue(format(new Date(date[2], date[1] - 1, date[0]), "DD-MM-YYYY"));
-            this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).setValue(new Date(date[2], date[1] - 1, date[0]));
-            this.formArray.controls[this.Index].get(`${this.formCtrName}`).updateValueAndValidity({ emitEvent: false });
-            this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).updateValueAndValidity({ emitEvent: false });
+            this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).setValue(format(new Date(date[2], date[1] - 1, date[0]), "DD-MM-YYYY"));
+            this.formArray.controls[this.Index].get(`${this.multiformCtrNameOne}`).setValue(new Date(date[2], date[1] - 1, date[0]));
+            this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).updateValueAndValidity({ emitEvent: false });
+            this.formArray.controls[this.Index].get(`${this.multiformCtrNameOne}`).updateValueAndValidity({ emitEvent: false });
             this.pickedDate.next(new Date(date[2], date[1] - 1, date[0]));
           }
         }
@@ -300,19 +290,19 @@ export class HNDatepickerComponent implements OnInit {
           if (this.isMultiRowMultiDatePicker == true) {
             this.newMutiltiPicker.setValue(value);
             this.newMutiltiPicker.updateValueAndValidity({ emitEvent: false });
-            this.formArray.controls[this.Index].get(`${this.formCtrName}`).setValue(this.model[this.Index]);
-            this.formArray.controls[this.Index].get(`${this.formCtrName}`).updateValueAndValidity({ emitEvent: false });
+            this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).setValue(this.model[this.Index]);
+            this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).updateValueAndValidity({ emitEvent: false });
             this.pickedDate.next(this.model[this.Index]);
           }
           else {
             if (String(typeof (value)) != 'object') {
-              this.formArray.controls[this.Index].get(`${this.formCtrName}`).setValue(value);
-              this.formArray.controls[this.Index].get(`${this.formCtrName}`).updateValueAndValidity({ emitEvent: false });
+              this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).setValue(value);
+              this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).updateValueAndValidity({ emitEvent: false });
               this.pickedDate.next(value);
             }
             else {
-              this.formArray.controls[this.Index].get(`${this.formCtrName}`).setValue(format(new Date(value), "DD-MM-YYYY"));
-              this.formArray.controls[this.Index].get(`${this.formCtrName}`).updateValueAndValidity({ emitEvent: false });
+              this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).setValue(format(new Date(value), "DD-MM-YYYY"));
+              this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).updateValueAndValidity({ emitEvent: false });
               this.pickedDate.next(value);
             }
           }
@@ -322,15 +312,15 @@ export class HNDatepickerComponent implements OnInit {
         if (this.isMultiRowMultiDatePicker == true) {
           this.newMutiltiPicker.setValue(value);
           this.newMutiltiPicker.updateValueAndValidity({ emitEvent: false });
-          this.formArray.controls[this.Index].get(`${this.formCtrName}`).setValue(this.models[this.Index]);
-          this.formArray.controls[this.Index].get(`${this.formCtrName}`).updateValueAndValidity({ emitEvent: false });
-          this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).setValue(this.model[this.Index]);
-          this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).updateValueAndValidity({ emitEvent: false });
+          this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).setValue(this.models[this.Index]);
+          this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).updateValueAndValidity({ emitEvent: false });
+          this.formArray.controls[this.Index].get(`${this.multiformCtrNameOne}`).setValue(this.model[this.Index]);
+          this.formArray.controls[this.Index].get(`${this.multiformCtrNameOne}`).updateValueAndValidity({ emitEvent: false });
           this.pickedDate.next(this.model[this.Index]);
         }
         else {
-          this.formArray.controls[this.Index].get(`${this.formCtrName}`).setValue(value);
-          this.formArray.controls[this.Index].get(`${this.formCtrName}`).updateValueAndValidity({ emitEvent: false });
+          this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).setValue(value);
+          this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).updateValueAndValidity({ emitEvent: false });
           this.pickedDate.next(value);
         }
       }
@@ -369,8 +359,8 @@ export class HNDatepickerComponent implements OnInit {
     }
     else {
       if (this.isMultiRowMultiDatePicker == true && this.model[this.Index]?.length == 0) {
-        this.formArray.controls[this.Index].get(`${this.formCtrName}`).setValue('');
-        this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).setValue('');
+        this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).setValue('');
+        this.formArray.controls[this.Index].get(`${this.multiformCtrNameOne}`).setValue('');
       }
       else if (this.isSingleMultiDatePicker == true && this.singleModel?.length == 0) {
         this.formName.setValue('');
@@ -378,8 +368,8 @@ export class HNDatepickerComponent implements OnInit {
       }
 
       if (this.isMultiRowMultiDatePicker == true && this.model[this.Index]?.length != 0) {
-        this.formArray.controls[this.Index].get(`${this.formCtrName}`).setValue(this.models[this.Index]);
-        this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).setValue(this.model[this.Index]);
+        this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).setValue(this.models[this.Index]);
+        this.formArray.controls[this.Index].get(`${this.multiformCtrNameOne}`).setValue(this.model[this.Index]);
       }
       else if (this.isSingleMultiDatePicker == true && this.singleModel?.length != 0) {
         this.formName.setValue(this.singleModels);
@@ -391,7 +381,6 @@ export class HNDatepickerComponent implements OnInit {
 
   DateValueSet(value) {
     let date: any;
-    console.log(value)
     if (value != '' && value != null && value != undefined) {
       date = format(value, "DD-MM-YYYY").split('-');
       if (this.ifSingle == true) {
@@ -423,23 +412,22 @@ export class HNDatepickerComponent implements OnInit {
       const date = event;
       const formatedDates = formatedDate
       const index = this._findDate(date);
-      console.log(index,"hiii")
       let selectedDate: any = [];
       let selecteddates: any = [];
       if (index === -1 || index === undefined) {
         if (this.isMultiRowMultiDatePicker == true) {
           if (!this.model[this.Index].some((res) => res == date) && !this.models[this.Index].some((res) => res == formatedDates)) {
             /****** Set value To Form Name One *************/
-            selectedDate = this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).value ? this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).value : [];
+            selectedDate = this.formArray.controls[this.Index].get(`${this.multiformCtrNameOne}`).value ? this.formArray.controls[this.Index].get(`${this.multiformCtrNameOne}`).value : [];
             selectedDate.push(date);
-            this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).setValue(selectedDate);
-            this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).updateValueAndValidity({ emitEvent: false });
+            this.formArray.controls[this.Index].get(`${this.multiformCtrNameOne}`).setValue(selectedDate);
+            this.formArray.controls[this.Index].get(`${this.multiformCtrNameOne}`).updateValueAndValidity({ emitEvent: false });
             this.model[this.Index] = selectedDate;
             /****** Set value To Form Name *************/
-            selecteddates = this.formArray.controls[this.Index].get(`${this.formCtrName}`).value ? this.formArray.controls[this.Index].get(`${this.formCtrName}`).value : [];
+            selecteddates = this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).value ? this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).value : [];
             selecteddates.push(formatedDates);
-            this.formArray.controls[this.Index].get(`${this.formCtrName}`).setValue(selecteddates);
-            this.formArray.controls[this.Index].get(`${this.formCtrName}`).updateValueAndValidity({ emitEvent: false });
+            this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).setValue(selecteddates);
+            this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).updateValueAndValidity({ emitEvent: false });
             this.models[this.Index] = selecteddates;
           }
 
@@ -462,12 +450,12 @@ export class HNDatepickerComponent implements OnInit {
         if (this.isMultiRowMultiDatePicker == true) {
           /****** Remove value To Form Name One *************/
           this.model[this.Index].splice(index, 1);
-          this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).setValue(this.model[this.Index]);
-          this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).updateValueAndValidity({ emitEvent: false });
+          this.formArray.controls[this.Index].get(`${this.multiformCtrNameOne}`).setValue(this.model[this.Index]);
+          this.formArray.controls[this.Index].get(`${this.multiformCtrNameOne}`).updateValueAndValidity({ emitEvent: false });
           /****** Remove value To Form Name *************/
           this.models[this.Index].splice(index, 1);
-          this.formArray.controls[this.Index].get(`${this.formCtrName}`).setValue(this.models[this.Index]);
-          this.formArray.controls[this.Index].get(`${this.formCtrName}`).updateValueAndValidity({ emitEvent: false });
+          this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).setValue(this.models[this.Index]);
+          this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).updateValueAndValidity({ emitEvent: false });
         }
         else if (this.isSingleMultiDatePicker == true) {
           /****** Remove value To Form Name One *************/
@@ -496,12 +484,12 @@ export class HNDatepickerComponent implements OnInit {
     if (this.isMultiRowMultiDatePicker == true) {
       /****** Remove value To Form Name One *************/
       this.model[this.Index].splice(index, 1);
-      this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).setValue(this.model[this.Index]);
-      this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).updateValueAndValidity({ emitEvent: false });
+      this.formArray.controls[this.Index].get(`${this.multiformCtrNameOne}`).setValue(this.model[this.Index]);
+      this.formArray.controls[this.Index].get(`${this.multiformCtrNameOne}`).updateValueAndValidity({ emitEvent: false });
       /****** Remove value To Form Name *************/
       this.models[this.Index].splice(index, 1);
-      this.formArray.controls[this.Index].get(`${this.formCtrName}`).setValue(this.models[this.Index]);
-      this.formArray.controls[this.Index].get(`${this.formCtrName}`).updateValueAndValidity({ emitEvent: false });
+      this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).setValue(this.models[this.Index]);
+      this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).updateValueAndValidity({ emitEvent: false });
     }
     else if (this.isSingleMultiDatePicker == true) {
       /****** Remove value To Form Name One *************/
@@ -517,11 +505,10 @@ export class HNDatepickerComponent implements OnInit {
 
   private _findDate(date: Date) {
     if (this.isMultiRowMultiDatePicker == true) {
-      return this.model[this.Index]?.map((m) => +m).indexOf(+date);
+      return this.model[this.Index].indexOf(date);
     }
     else if (this.isSingleMultiDatePicker == true) {
-      console.log(this.singleModel)
-      return this.singleModel?.map((m) => +m).indexOf(+date);
+      return this.singleModel.indexOf(date);
     }
   }
 
@@ -549,15 +536,16 @@ export class HNDatepickerComponent implements OnInit {
     }
     else{
       if(this.formName.valid){
-        if((this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).value != '' && this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).value != undefined && this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).value != null) && 
+        if((this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).value != '' && this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).value != undefined && this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).value != null) && 
         (this.formNameOne.value != '' && this.formNameOne.value != undefined && this.formNameOne.value != null)){
-          if(this.isto ? moment(new Date(this.formNameOne.value)).isBefore(moment(new Date(this.formArray.controls[this.Index].get(`${this.multiformCtrNameOne}`).value)))
-           :  moment(new Date(this.formArray.controls[this.Index].get(`${this.multiformCtrNameOne}`).value)).isBefore(moment(new Date(this.formNameOne.value)))){
-            this.formArray.controls[this.Index].get(`${this.multiformCtrNameOne}`).setErrors({'min': true});
+          if(this.isto ? moment(new Date(this.formNameOne.value)).isBefore(moment(new Date(this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).value)))
+           :  moment(new Date(this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).value)).isBefore(moment(new Date(this.formNameOne.value)))){
+            this.formArray.controls[this.Index].get(`${this.formCtrName}`).setErrors({'min': true});
+            this.formArray.controls[this.Index].get(`${this.formCtrName}`).markAsTouched();
           }
           else{
             this.formName.setErrors(null);
-            this.formArray.controls[this.Index].get(`${this.multiformCtrNameOne}`).setErrors(null);
+            this.formArray.controls[this.Index].get(`${this.formCtrName}`).setErrors(null);
           }
         }
       }
@@ -584,15 +572,132 @@ export class HNDatepickerComponent implements OnInit {
     }
     else{
       if(this.formName.valid){
-        if((this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).value != '' && this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).value != undefined && this.formArray.controls[this.Index].get(`${this.multiformCtrName}`).value != null) && 
+        if((this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).value != '' && this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).value != undefined && this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).value != null) && 
         (this.formNameOne.value != '' && this.formNameOne.value != undefined && this.formNameOne.value != null)){
-          if(this.isto ? moment(new Date(this.formNameOne.value)).isAfter(moment(new Date(this.formArray.controls[this.Index].get(`${this.multiformCtrNameOne}`).value)))
-           :  moment(new Date(this.formArray.controls[this.Index].get(`${this.multiformCtrNameOne}`).value)).isAfter(moment(new Date(this.formNameOne.value)))){
-            this.formArray.controls[this.Index].get(`${this.multiformCtrNameOne}`).setErrors({'max': true});
+          if(this.isto ? moment(new Date(this.formNameOne.value)).isAfter(moment(new Date(this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).value)))
+           :  moment(new Date(this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).value)).isAfter(moment(new Date(this.formNameOne.value)))){
+            this.formArray.controls[this.Index].get(`${this.formCtrName}`).setErrors({'max': true});
+            this.formArray.controls[this.Index].get(`${this.formCtrName}`).markAsTouched();
           }
           else{
             this.formName.setErrors(null);
-            this.formArray.controls[this.Index].get(`${this.multiformCtrNameOne}`).setErrors(null);
+            this.formArray.controls[this.Index].get(`${this.formCtrName}`).setErrors(null);
+          }
+        }
+      }
+    }
+  }
+
+  /************* Validate Multi Min Date ***********/
+  ValidateMultiMin(){
+    if(this.ifSingle == true){
+      if(this.formName.valid){
+        if((this.formgroup.get(`${this.formCtrNameOne}`).value != '' && this.formgroup.get(`${this.formCtrNameOne}`).value != undefined && this.formgroup.get(`${this.formCtrNameOne}`).value != null) && 
+        (this.formNameOne.value != '' && this.formNameOne.value != undefined && this.formNameOne.value != null)){
+          // if(this.isto ? moment(new Date(this.formNameOne.value)).isBefore(moment(new Date(this.formgroup.get(`${this.formCtrNameOne}`).value)))
+          //  :  moment(new Date(this.formgroup.get(`${this.formCtrNameOne}`).value)).isBefore(moment(new Date(this.formNameOne.value)))){
+          //   this.formgroup.get(`${this.formCtrName}`).setErrors({'min': true});
+          //   this.formgroup.get(`${this.formCtrName}`).markAsTouched();
+          // }
+          // else{
+          //   this.formName.setErrors(null);
+          //   this.formgroup.get(`${this.formCtrName}`).setErrors(null);
+          // }
+        }
+      }
+    }
+    else{
+      if(this.formName.valid){
+        let isdate: boolean = false;
+        if((this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).value != '' && this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).value != undefined && this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).value != null) && 
+        (this.formNameOne.value != '' && this.formNameOne.value != undefined && this.formNameOne.value != null)){
+          let date = this.formName.value ? this.formName.value : [];
+          let date1 = this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).value ? this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).value : [];
+         console.log(date,date1)
+          if(this.isto){
+            for(let i=0; i<date.length; i++){
+              if(isdate){
+                break;
+              }
+              for(let j=0; j<date1.length; j++){
+                if(moment(new Date(date[i])).isBefore(moment(new Date(date1[j])))){
+                 this.formArray.controls[this.Index].get(`${this.formCtrName}`).setErrors({'min': true});
+                 this.formArray.controls[this.Index].get(`${this.formCtrName}`).markAsTouched();
+                 this.newMutiltiPicker.setErrors({'min': true});
+                 this.newMutiltiPicker.markAsTouched();
+                 isdate = true;
+                 break;
+               }
+               else{
+                 this.formName.setErrors(null);
+                 this.formArray.controls[this.Index].get(`${this.formCtrName}`).setErrors(null);
+                 this.newMutiltiPicker.setErrors(null);
+               }
+              }
+            }
+          }
+          else{
+            for(let i=0; i<date.length; i++){
+              if(isdate){
+                break;
+              }
+              for(let j=0; j<date1.length; j++){
+                if(moment(new Date(date1[j])).isBefore(moment(new Date(date[i])))){
+                 this.formArray.controls[this.Index].get(`${this.formCtrName}`).setErrors({'min': true});
+                 this.formArray.controls[this.Index].get(`${this.formCtrName}`).markAsTouched();
+                 this.newMutiltiPicker.setErrors({'min': true});
+                 this.newMutiltiPicker.markAsTouched();
+                 isdate = true;
+                 break;
+               }
+               else{
+                 this.formName.setErrors(null);
+                 this.formArray.controls[this.Index].get(`${this.formCtrName}`).setErrors(null);
+                 this.newMutiltiPicker.setErrors(null);
+               }
+              }
+            }
+          }
+        }
+        else{
+          this.formName.setErrors(null);
+          this.formArray.controls[this.Index].get(`${this.formCtrName}`).setErrors(null);
+          this.newMutiltiPicker.setErrors(null);
+        }
+      }
+    }
+  }
+
+  /***************** Validate Multi Max Date *****************/
+  ValidateMultiMax(){
+    if(this.ifSingle == true){
+      if(this.formName.valid){
+        if((this.formgroup.get(`${this.formCtrNameOne}`).value != '' && this.formgroup.get(`${this.formCtrNameOne}`).value != undefined && this.formgroup.get(`${this.formCtrNameOne}`).value != null) && 
+        (this.formNameOne.value != '' && this.formNameOne.value != undefined && this.formNameOne.value != null)){
+          if(this.isto ? moment(new Date(this.formgroup.get(`${this.formCtrNameOne}`).value)).isBefore(moment(new Date(this.formNameOne.value)))           
+           : moment(new Date(this.formNameOne.value)).isBefore(moment(new Date(this.formgroup.get(`${this.formCtrNameOne}`).value))) ){
+            this.formgroup.get(`${this.formCtrName}`).setErrors({'max': true});
+            this.formgroup.get(`${this.formCtrName}`).markAsTouched();
+          }
+          else{
+            this.formName.setErrors(null);
+            this.formgroup.get(`${this.formCtrName}`).setErrors(null);
+          }
+        }
+      }
+    }
+    else{
+      if(this.formName.valid){
+        if((this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).value != '' && this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).value != undefined && this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).value != null) && 
+        (this.formNameOne.value != '' && this.formNameOne.value != undefined && this.formNameOne.value != null)){
+          if(this.isto ? moment(new Date(this.formNameOne.value)).isAfter(moment(new Date(this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).value)))
+           :  moment(new Date(this.formArray.controls[this.Index].get(`${this.formCtrNameOne}`).value)).isAfter(moment(new Date(this.formNameOne.value)))){
+            this.formArray.controls[this.Index].get(`${this.formCtrName}`).setErrors({'max': true});
+            this.formArray.controls[this.Index].get(`${this.formCtrName}`).markAsTouched();
+          }
+          else{
+            this.formName.setErrors(null);
+            this.formArray.controls[this.Index].get(`${this.formCtrName}`).setErrors(null);
           }
         }
       }
